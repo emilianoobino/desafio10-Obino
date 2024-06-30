@@ -1,0 +1,19 @@
+ <main class="profile-container">
+        <h1>Perfil</h1>
+
+        <div class="profile-info">
+            <p>Bienvenido, {{user.nombre}} {{user.apellido}}!</p>
+            <p>Rol: {{user.role}}</p>
+
+            <form action="/api/users/logout" method="POST">
+                <button class="btn neon-btn" type="submit">Logout</button>
+            </form>
+
+            {{#if this.isAdmin}}
+                <a class="btn neon-btn" href="/realtimeproducts">Modificar Productos</a>
+            {{else}}
+                <a class="btn neon-btn" href="/chat">Chat en vivo</a>
+                <a class="btn neon-btn" href="/products">Tienda</a>
+            {{/if}}
+        </div>
+    </main>

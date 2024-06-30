@@ -1,0 +1,28 @@
+<div class="header">
+        <h1 class="title">Productos</h1>
+        <a href="/carts/{{cartId}}" class="cart-link">Carrito</a>
+    </div>
+    <div class="products-container">
+        {{#each productos}}
+        <div class="product-card">
+            <img src="{{img}}" alt="{{title}}" class="product-image">
+            <div class="product-info">
+                <h2 class="product-title">{{title}}</h2>
+                <p class="product-description">{{description}}</p>
+                <p class="product-price">Price: ${{price}}</p>
+                <form action="/api/carts/{{../cartId}}/product/{{id}}" method="POST">
+                    <button class="add-to-cart-btn" type="submit">Agregar al Carrito</button>
+                </form>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class="pagination">
+        {{#if hasPrevPage}}
+        <a href="/products?page={{prevPage}}" class="page-link">Anterior</a>
+        {{/if}}
+        {{#if hasNextPage}}
+        <a href="/products?page={{nextPage}}" class="page-link">Siguiente</a>
+        {{/if}}
+        <p class="page-info">Página {{currentPage}} de {{totalPages}}</p>
+    </div>

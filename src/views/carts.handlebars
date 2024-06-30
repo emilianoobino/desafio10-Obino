@@ -1,0 +1,74 @@
+<h1 class="">Carrito de Compras</h1>
+
+<div class="products-container">
+    {{#each productos}}
+    <div class="">
+        <div class="">
+            <h5 class="">Producto: {{this.product.title}}</h5>
+            <p class="">Cantidad: {{this.quantity}}</p>
+            <p class="">Precio: ${{this.product.totalPrice}}</p>
+            <button onclick="eliminarProducto('{{this.cartId}}', '{{this.product._id}}')" class="">Eliminar</button>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+<button onclick="vaciarCarrito('{{cartId}}')" class="">Vaciar Carrito</button>
+<button onclick="finalizarCompra('{{cartId}}')" class="">Finalizar Compra</button>
+<h3 class="">Total de la compra: ${{totalCompra}}</h3>
+
+<script>
+    function eliminarProducto(cartId, productId) {
+        fetch(`/api/carts/${cartId}/product/${productId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar el producto del carrito');
+                }
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function vaciarCarrito(cartId) {
+        fetch(`/api/carts/${cartId}`, {
+            method: 'DELETE'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al vaciar el carrito');
+                }
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function finalizarCompra(cartId) {
+        fetch(`/api/carts/${cartId}/purchase`, {
+            method: 'POST'
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al finalizar la compra');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.productosNoDisponibles && data.productosNoDisponibles.length > 0) {
+                    alert('Algunos productos no pudieron comprarse debido a falta de stock.');
+                } else {
+                    alert('Compra finalizada con éxito.');
+                    window.location.href = `/checkout/${data.ticketId}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al finalizar la compra');
+            });
+    }
+</script>
